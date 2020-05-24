@@ -1,0 +1,13 @@
+cut -d',' -f'1,2,3,4,5,6' data/synthetic_data/condition_era.csv > data/filtered/condition_era.csv
+cut -d',' -f'1,2,3,4,5,6,7,8,14,15,16' data/synthetic_data/condition_occurrence.csv > data/filtered/condition_occurrence.csv
+cut -d',' -f'1,2,4,5,6,7' data/synthetic_data/device_exposure.csv > data/filtered/device_exposure.csv
+cut -d',' -f'1,2,3,4,5,6' data/synthetic_data/drug_era.csv > data/filtered/drug_era.csv
+cut -d',' -f'1,2,3,4,5,6,7,9,10,11,12,13,21,22,23' data/synthetic_data/drug_exposure.csv > data/filtered/drug_exposure.csv
+cut -d',' -f'1,2' data/synthetic_data/goldstandard.csv > data/filtered/goldstandard.csv
+cut -d',' -f'1' data/synthetic_data/location.csv > data/filtered/location.csv
+cut -d',' -f'1,2,3,4,5,6,7,8,9,10,11,12,13,18,19,20' data/synthetic_data/measurement.csv > data/filtered/measurement.csv
+cut -d',' -f'1,2,3,4,5,6,7,8,9,11,16,17' data/synthetic_data/observation.csv > data/filtered/observation.csv
+cut -d',' -f'1,2,3,4' data/synthetic_data/observation_period.csv > data/filtered/observation_period.csv
+cut -d',' -f'1,2,3,4,5,6,7,8,9,13,16,18' data/synthetic_data/person.csv > data/filtered/person.csv
+cut -d',' -f'1,2,3,4,5,6,13' data/synthetic_data/procedure_occurrence.csv > data/filtered/procedure_occurrence.csv
+cut -d',' -f'2,3,4,5,6,7,12' data/synthetic_data/visit_occurrence.csv > data/filtered/visit_occurrence.csv

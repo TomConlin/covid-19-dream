@@ -1,0 +1,298 @@
+
+ cd ~/Projects/COVID19/Dream/data/
+
+unzip idiot_user_interface.zip   #(yes fetching the data files was a drag)
+
+tar -tzf synthetic_data.tar.gz 
+tar -xzf synthetic_data.tar.gz 
+less data_dictionary.csv 
+
+
+for f in synthetic_data/*; do 
+    echo ${f#*/}; head -1 $f| tr ',' '\n' | grep -n . ; done > table-columns.list
+
+chmod +x ../scripts/table-header2schema.awk 
+
+ ../scripts/table-header2schema.awk table-columns.list 
+
+../scripts/table-header2schema.awk table-columns.list > ../syndat_schema_generated.sql
+
+ 2023  chmod +x ../scripts/header2schema.awk
+ 2024  chmod +x ../scripts/table-header2graphviz.awk 
+ 2025  ../scripts/table-header2graphviz.awk  table-columns.list
+ 2026  ../scripts/table-header2graphviz.awk  table-columns.list | xdot
+ 2027  ../scripts/table-header2graphviz.awk  table-columns.list > ../syndat_schema.gv
+ 2028  xdot ../syndat_schema.gv 
+ 2029  ../scripts/table-header2graphviz.awk  table-columns.list > ../syndat_schema.gv
+ 2030  xdot ../syndat_schema.gv 
+ 2031  ../scripts/table-header2graphviz.awk  table-columns.list > ../syndat_schema.gv
+ 2032  xdot ../syndat_schema.gv 
+ 2033  ../scripts/table-header2graphviz.awk  table-columns.list > ../syndat_schema.gv
+ 2034  xdot ../syndat_schema.gv 
+ 2035  ../scripts/table-header2graphviz.awk  table-columns.list > ../syndat_schema.gv
+ 2036  xdot ../syndat_schema.gv 
+ 2037  ll
+ 2038  ls synthetic_data
+ 2039  sort -u casual_edge.maybe 
+ 2040  ../scripts/table-header2graphviz.awk  table-columns.list > ../syndat_schema.gv
+ 2041  xdot ../syndat_schema.gv 
+ 2042  ll
+ 2043  grep -v "^[0-9]" table-columns.list 
+ 2044  grep -v "^[0-9]" table-columns.list  | wc -l
+ 2045  ll
+ 2046  ped
+ 2047  pwd
+ 2048  ll
+ 2049  sort casual_edge.maybe | uniq -c | sort -nr
+ 2050  sort casual_edge.maybe | uniq -c | sort -nr | grep "*     1"
+ 2051  sort casual_edge.maybe | uniq -c | sort -nr | grep -v "     1"
+ 2052  history
+
+
+get the feilds with the common mames
+
+sort casual_edge.maybe | uniq -c | sort -nr | grep -v "     1"
+      8 Warning: node provider, port provider_id unrecognized
+      6 Warning: node visit_occurrence, port visit_occurrence_id unrecognized
+      6 Warning: node visit_detail, port visit_detail_id unrecognized
+      2 Warning: node value_as_concept, port value_as_concept_id unrecognized
+      2 Warning: node unit_concept, port unit_concept_id unrecognized
+      2 Warning: node drug_concept, port drug_concept_id unrecognized
+
+#########################################################
+
+
+
+git clone git@github.com:TomConlin/CommonDataModel.git
+
+#########################################################
+
+
+we only need ~12 of their ~39 tables
+
+condition_era
+condition_occurrence
+device_exposure
+drug_era
+drug_exposure
+goldstandard
+location
+measurement
+observation
+observation_period
+person
+procedure_occurrence
+visit_occurrence
+
+grab a copy of
+PostgreSQL/OMOP CDM postgresql ddl.txt
+
+delete the unspecified tables
+change types to TEXT,INTEGER or REAL
+add UNIQUE PRIMARY KEY to the first columns
+
+the goldstandard table is not part of OMOP
+copy mine from the generated schema.
+
+
+
+
+# for FKs
+CommonDataModel/PostgreSQL/OMOP CDM postgresql constraints.txt
+
+grep -w -f tables ~/GitHub/CommonDataModel/PostgreSQL/OMOP\ CDM\ postgresql\ constraints.txt  > ../syndat_schema_constraints.sql
+
+
+awk 'NR==FNR{t[$1]}NR!=FNR && ($3 in t) && ($11 in t){print}' tables syndat_schema_constraints.sql > syndat_constraints.sql
+
+wc -l < syndat_constraints.sql 
+18
+
+will need to add the 'goldstandard -> person' one manually
+
+
+tsort <(cut -f 3,11 -d ' ' syndat_constraints.sql) | tac
+location
+person
+visit_occurrence
+procedure_occurrence
+observation_period
+observation
+measurement
+goldstandard
+drug_exposure
+drug_era
+device_exposure
+condition_occurrence
+condition_era
+
+for a load order 
+in case constraints are in before data is loaded
+
+echo "PRAGMA foreign_keys = OFF;" > syndat_load.sql
+echo ".mode csv" >> syndat_load.sql
+for t in $(tsort <(cut -f 3,11 -d ' ' syndat_constraints.sql) | tac); do
+    echo ".import '|tail -n +2 ./data/synthetic_data/$t.csv' $t" >> syndat_load.sql
+done
+echo "vacuum;" >> syndat_load.sql
+
+the `|tail -n +2` is to start at the second line skipping the header
+
+time sqlite3 syndat < syndat_load.sql
+
+# update the load script to wipe previous schema
+
+sed 's|CREATE TABLE \([a-z_]*\)|DROP TABLE IF EXISTS \1;\nCREATE TABLE \1|' syndat_schema.sql > syndat_load_schema.sql
+
+sqlite3 syndat < syndat_load_schema.sql
+
+time sqlite3 syndat < syndat_load.sq
+# couple of minutes but massive FK failure 
+
+time sqlite3 syndat < syndat_constraints.sql
+convert postgress style constrainte to sqlite style
+
+ahh sqlite only adds constraints when the table is created
+and they can be defered for loading if desired
+
+###################################################################################
+
+Went on a diversion to create a bit of metadata for this dataset (as a sqlitedb)
+which means the process now works for any sqlitedb
+
+
+script is in the './SQL/' directory as 'gen_db_tab_col_meta.sql'
+and it reports: table column datatype count and unique
+
+the output for the orifinal data is in  'db_tab_col_meta.tab.orig'
+
+
+
+
+
+####################################################################################
+
+re did with ambigous keys running in both directions
+(instead of arbitrary baset on table name sort order)
+
+scripts/table-header2graphviz.awk table-columns.list > syndat_schema.gv
+
+# went to more effort than it was worth to deduce provably "incorrect" orders to drop.
+
+awk 'BEGIN{OFS="\t"}substr($2, (length($2)-2))=="_id"{t[$1];rt[NR]=$1;rc[NR]=$2;ru[NR]=$5;}END{for(i=1;i<=NR;i++){if(!(substr(rc[i],1,length(rc[i])-3) in t)) print rt[i],rc[i],ru[i]}}' db_tab_col_meta.tab |
+    scripts/tab-col-unq_to_po.awk
+
+observation:value_as_concept_id	measurement:value_as_concept_id
+observation:unit_concept_id	measurement:unit_concept_id
+
+yep, just the two of them.
+
+
+xdot syndat_schema.gv
+
+The implied edges really do not do much good for me.
+
+#####################################################################################
+#####################################################################################
+
+REDO with constant columns  filtered out
+
+#####################################################################################
+#####################################################################################
+when a column in a table has one unique value it is a constant 
+and has no predictive value.
+
+
+
+grep "[^0-9]1$" db_tab_col_meta.tab.orig | cut -f 1,2 > constant_columns_tocut.tab
+
+wc -l < constant_columns_tocut.tab
+64
+
+note that is out of:
+
+grep -c "^[0-9]" table-columns.list
+169
+
+Which is over a third of the dataset
+
+mkdir data/filtered
+
+# write "generate_cutlist.awk" to use existing metadata diles
+
+scripts/generate_cutlist.awk constant_columns_tocut.tab table-columns.list > cutlist.sourceme
+
+cat cutlist.sourceme 
+cut -d',' -f'1,2,3,4,5,6' data/synthetic_data/condition_era.csv > data/filtered/condition_era.csv
+cut -d',' -f'1,2,3,4,5,6,7,8,14,15,16' data/synthetic_data/condition_occurrence.csv > data/filtered/condition_occurrence.csv
+cut -d',' -f'1,2,4,5,6,7' data/synthetic_data/device_exposure.csv > data/filtered/device_exposure.csv
+cut -d',' -f'1,2,3,4,5,6' data/synthetic_data/drug_era.csv > data/filtered/drug_era.csv
+cut -d',' -f'1,2,3,4,5,6,7,9,10,11,12,13,21,22,23' data/synthetic_data/drug_exposure.csv > data/filtered/drug_exposure.csv
+cut -d',' -f'1,2' data/synthetic_data/goldstandard.csv > data/filtered/goldstandard.csv
+cut -d',' -f'1' data/synthetic_data/location.csv > data/filtered/location.csv
+cut -d',' -f'1,2,3,4,5,6,7,8,9,10,11,12,13,18,19,20' data/synthetic_data/measurement.csv > data/filtered/measurement.csv
+cut -d',' -f'1,2,3,4,5,6,7,8,9,11,16,17' data/synthetic_data/observation.csv > data/filtered/observation.csv
+cut -d',' -f'1,2,3,4' data/synthetic_data/observation_period.csv > data/filtered/observation_period.csv
+cut -d',' -f'1,2,3,4,5,6,7,8,9,13,16,18' data/synthetic_data/person.csv > data/filtered/person.csv
+cut -d',' -f'1,2,3,4,5,6,13' data/synthetic_data/procedure_occurrence.csv > data/filtered/procedure_occurrence.csv
+cut -d',' -f'2,3,4,5,6,7,12' data/synthetic_data/visit_occurrence.csv > data/filtered/visit_occurrence.csv
+
+source cutlist.sourceme 
+
+for f in data/filtered/*.csv ; do 
+    echo ${f##*/}; 
+    head -1 $f| tr ',' '\n' | grep -n . ;
+done > filtered-table-columns.list
+
+
+meld table-columns.list filtered-table-columns.list
+ 
+# diff looks perfectly reasonable.
+
+# viewing the graph is vastly simplified
+
+scripts/table-header2schema.awk filtered-table-columns.list > filtered-syndat_schema_generated.sql
+
+cp filtered-syndat_schema_generated.sql filtered-syndat_schema_manual.sql
+
+
+Side by side edit to get datatypes & null | not null as omop sees it.
+
+# move the originsl db aside
+mv syndat syndat_orig
+
+for a load order 
+in case constraints are in before data is loaded
+
+echo "PRAGMA foreign_keys = ON;" > syndat_load.sql
+echo ".mode csv" >> syndat_load.sql
+for t in $(tsort <(cut -f 3,11 -d ' ' syndat_constraints.sql) | tac); do
+    echo ".import '|tail -n +2 ./data/filtered/$t.csv' $t" >> syndat_load.sql
+done
+echo "vacuum;" >> syndat_load.sql
+
+#the `|tail -n +2` is to start at the second line skipping the header
+
+rm syndat
+sqlite3 syndat filtered-syndat_schema_manual.sql
+sqlite3 syndat syndat_load.sql
+
+# still get massive foreign key failures
+
+ 
+sqlite3 syndat  gen_db_tab_col_meta.sql
+
+
+meld  db_tab_col_meta.tab.orig db_tab_col_meta.tab
+
+Still looks very reasonable  
+the constant columns are gone
+and most tables are short by less than 10k rows total.
+but the nunber of unique values tyopicaly does not change at all
+
+must conjecture that the person table had a few thousand records deleted
+but they are not set with an "on delete cascade" so we get tens of thousands 
+of useless rows in the database, ... did.
+
+
+

@@ -1,0 +1,13 @@
+condition_era
+condition_occurrence
+device_exposure
+drug_era
+drug_exposure
+goldstandard
+location
+measurement
+observation
+observation_period
+person
+procedure_occurrence
+visit_occurrence

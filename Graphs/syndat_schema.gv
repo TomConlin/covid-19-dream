@@ -1,0 +1,283 @@
+digraph "table-columns.list" {
+	rankdir = "LR"
+	# nodes
+	condition_occurrence[
+		label = "condition_occurrence | <condition_occurrence_id> condition_occurrence_id | <person_id> person_id | <condition_concept_id> condition_concept_id | condition_start_date | condition_start_datetime | condition_end_date | condition_end_datetime | <condition_type_concept_id> condition_type_concept_id | stop_reason | <provider_id> provider_id | <visit_occurrence_id> visit_occurrence_id | <visit_detail_id> visit_detail_id | condition_source_value | <condition_source_concept_id> condition_source_concept_id | condition_status_source_value | <condition_status_concept_id> condition_status_concept_id"
+		shape = "Mrecord"
+	];
+	procedure_occurrence[
+		label = "procedure_occurrence | <procedure_occurrence_id> procedure_occurrence_id | <person_id> person_id | <procedure_concept_id> procedure_concept_id | procedure_date | procedure_datetime | <procedure_type_concept_id> procedure_type_concept_id | <modifier_concept_id> modifier_concept_id | quantity | <provider_id> provider_id | <visit_occurrence_id> visit_occurrence_id | <visit_detail_id> visit_detail_id | procedure_source_value | <procedure_source_concept_id> procedure_source_concept_id | modifier_source_value"
+		shape = "Mrecord"
+	];
+	observation[
+		label = "observation | <observation_id> observation_id | <person_id> person_id | <observation_concept_id> observation_concept_id | observation_date | observation_datetime | <observation_type_concept_id> observation_type_concept_id | value_as_number | value_as_string | <value_as_concept_id> value_as_concept_id | <qualifier_concept_id> qualifier_concept_id | <unit_concept_id> unit_concept_id | <provider_id> provider_id | <visit_occurrence_id> visit_occurrence_id | <visit_detail_id> visit_detail_id | observation_source_value | <observation_source_concept_id> observation_source_concept_id | unit_source_value | qualifier_source_value"
+		shape = "Mrecord"
+	];
+	visit_occurrence[
+		label = "visit_occurrence | <visit_occurrence_id> visit_occurrence_id | <person_id> person_id | <visit_concept_id> visit_concept_id | visit_start_date | visit_start_datetime | visit_end_date | visit_end_datetime | <visit_type_concept_id> visit_type_concept_id | <provider_id> provider_id | <care_site_id> care_site_id | visit_source_value | <visit_source_concept_id> visit_source_concept_id | <admitting_source_concept_id> admitting_source_concept_id | admitting_source_value | <discharge_to_concept_id> discharge_to_concept_id | discharge_to_source_value | <preceding_visit_occurrence_id> preceding_visit_occurrence_id"
+		shape = "Mrecord"
+	];
+	location[
+		label = "location | <location_id> location_id | address_1 | address_2 | city | state | zip | county | location_source_value"
+		shape = "Mrecord"
+	];
+	observation_period[
+		label = "observation_period | <observation_period_id> observation_period_id | <person_id> person_id | observation_period_start_date | observation_period_end_date | <period_type_concept_id> period_type_concept_id"
+		shape = "Mrecord"
+	];
+	goldstandard[
+		label = "goldstandard | <person_id> person_id | status"
+		shape = "Mrecord"
+	];
+	drug_era[
+		label = "drug_era | <drug_era_id> drug_era_id | <person_id> person_id | <drug_concept_id> drug_concept_id | drug_era_start_date | drug_era_end_date | drug_exposure_count | gap_days"
+		shape = "Mrecord"
+	];
+	device_exposure[
+		label = "device_exposure | <device_exposure_id> device_exposure_id | <person_id> person_id | <device_concept_id> device_concept_id | device_exposure_start_date | device_exposure_start_datetime | device_exposure_end_date | device_exposure_end_datetime | <device_type_concept_id> device_type_concept_id | <unique_device_id> unique_device_id | quantity | <provider_id> provider_id | <visit_occurrence_id> visit_occurrence_id | <visit_detail_id> visit_detail_id | device_source_value | <device_source_concept_id> device_source_concept_id"
+		shape = "Mrecord"
+	];
+	drug_exposure[
+		label = "drug_exposure | <drug_exposure_id> drug_exposure_id | <person_id> person_id | <drug_concept_id> drug_concept_id | drug_exposure_start_date | drug_exposure_start_datetime | drug_exposure_end_date | drug_exposure_end_datetime | verbatim_end_date | <drug_type_concept_id> drug_type_concept_id | stop_reason | refills | quantity | days_supply | sig | <route_concept_id> route_concept_id | lot_number | <provider_id> provider_id | <visit_occurrence_id> visit_occurrence_id | <visit_detail_id> visit_detail_id | drug_source_value | <drug_source_concept_id> drug_source_concept_id | route_source_value | dose_unit_source_value"
+		shape = "Mrecord"
+	];
+	condition_era[
+		label = "condition_era | <condition_era_id> condition_era_id | <person_id> person_id | <condition_concept_id> condition_concept_id | condition_era_start_date | condition_era_end_date | condition_occurrence_count"
+		shape = "Mrecord"
+	];
+	person[
+		label = "person | <person_id> person_id | <gender_concept_id> gender_concept_id | year_of_birth | month_of_birth | day_of_birth | birth_datetime | <race_concept_id> race_concept_id | <ethnicity_concept_id> ethnicity_concept_id | <location_id> location_id | <provider_id> provider_id | <care_site_id> care_site_id | person_source_value | gender_source_value | <gender_source_concept_id> gender_source_concept_id | race_source_value | <race_source_concept_id> race_source_concept_id | ethnicity_source_value | <ethnicity_source_concept_id> ethnicity_source_concept_id"
+		shape = "Mrecord"
+	];
+	measurement[
+		label = "measurement | <measurement_id> measurement_id | <person_id> person_id | <measurement_concept_id> measurement_concept_id | measurement_date | measurement_datetime | measurement_time | <measurement_type_concept_id> measurement_type_concept_id | <operator_concept_id> operator_concept_id | value_as_number | <value_as_concept_id> value_as_concept_id | <unit_concept_id> unit_concept_id | range_low | range_high | <provider_id> provider_id | <visit_occurrence_id> visit_occurrence_id | <visit_detail_id> visit_detail_id | measurement_source_value | <measurement_source_concept_id> measurement_source_concept_id | unit_source_value | value_source_value"
+		shape = "Mrecord"
+	];
+	# directed edges  (foreign keys)
+	condition_occurrence:person_id -> person:person_id;
+
+	condition_occurrence:visit_occurrence_id -> visit_occurrence:visit_occurrence_id;
+
+	procedure_occurrence:person_id -> person:person_id;
+
+	procedure_occurrence:visit_occurrence_id -> visit_occurrence:visit_occurrence_id;
+
+	observation:person_id -> person:person_id;
+
+	observation:visit_occurrence_id -> visit_occurrence:visit_occurrence_id;
+
+	visit_occurrence:person_id -> person:person_id;
+
+	observation_period:person_id -> person:person_id;
+
+	goldstandard:person_id -> person:person_id;
+
+	drug_era:person_id -> person:person_id;
+
+	device_exposure:person_id -> person:person_id;
+
+	device_exposure:visit_occurrence_id -> visit_occurrence:visit_occurrence_id;
+
+	drug_exposure:person_id -> person:person_id;
+
+	drug_exposure:visit_occurrence_id -> visit_occurrence:visit_occurrence_id;
+
+	condition_era:person_id -> person:person_id;
+
+	person:location_id -> location:location_id;
+
+	measurement:person_id -> person:person_id;
+
+	measurement:visit_occurrence_id -> visit_occurrence:visit_occurrence_id;
+
+	# casual/tenous edges (shared keys for FKs to tables not included?)
+	condition_occurrence:condition_concept_id -> condition_era:condition_concept_id [color="gray"];
+
+	condition_occurrence:provider_id -> procedure_occurrence:provider_id [color="gray"];
+
+	condition_occurrence:provider_id -> observation:provider_id [color="gray"];
+
+	condition_occurrence:provider_id -> visit_occurrence:provider_id [color="gray"];
+
+	condition_occurrence:provider_id -> device_exposure:provider_id [color="gray"];
+
+	condition_occurrence:provider_id -> drug_exposure:provider_id [color="gray"];
+
+	condition_occurrence:provider_id -> person:provider_id [color="gray"];
+
+	condition_occurrence:provider_id -> measurement:provider_id [color="gray"];
+
+	condition_occurrence:visit_detail_id -> procedure_occurrence:visit_detail_id [color="gray"];
+
+	condition_occurrence:visit_detail_id -> observation:visit_detail_id [color="gray"];
+
+	condition_occurrence:visit_detail_id -> device_exposure:visit_detail_id [color="gray"];
+
+	condition_occurrence:visit_detail_id -> drug_exposure:visit_detail_id [color="gray"];
+
+	condition_occurrence:visit_detail_id -> measurement:visit_detail_id [color="gray"];
+
+	procedure_occurrence:provider_id -> condition_occurrence:provider_id [color="gray"];
+
+	procedure_occurrence:provider_id -> observation:provider_id [color="gray"];
+
+	procedure_occurrence:provider_id -> visit_occurrence:provider_id [color="gray"];
+
+	procedure_occurrence:provider_id -> device_exposure:provider_id [color="gray"];
+
+	procedure_occurrence:provider_id -> drug_exposure:provider_id [color="gray"];
+
+	procedure_occurrence:provider_id -> person:provider_id [color="gray"];
+
+	procedure_occurrence:provider_id -> measurement:provider_id [color="gray"];
+
+	procedure_occurrence:visit_detail_id -> condition_occurrence:visit_detail_id [color="gray"];
+
+	procedure_occurrence:visit_detail_id -> observation:visit_detail_id [color="gray"];
+
+	procedure_occurrence:visit_detail_id -> device_exposure:visit_detail_id [color="gray"];
+
+	procedure_occurrence:visit_detail_id -> drug_exposure:visit_detail_id [color="gray"];
+
+	procedure_occurrence:visit_detail_id -> measurement:visit_detail_id [color="gray"];
+
+	observation:value_as_concept_id -> measurement:value_as_concept_id ;
+
+	observation:unit_concept_id -> measurement:unit_concept_id ;
+
+	observation:provider_id -> condition_occurrence:provider_id [color="gray"];
+
+	observation:provider_id -> procedure_occurrence:provider_id [color="gray"];
+
+	observation:provider_id -> visit_occurrence:provider_id [color="gray"];
+
+	observation:provider_id -> device_exposure:provider_id [color="gray"];
+
+	observation:provider_id -> drug_exposure:provider_id [color="gray"];
+
+	observation:provider_id -> person:provider_id [color="gray"];
+
+	observation:provider_id -> measurement:provider_id [color="gray"];
+
+	observation:visit_detail_id -> condition_occurrence:visit_detail_id [color="gray"];
+
+	observation:visit_detail_id -> procedure_occurrence:visit_detail_id [color="gray"];
+
+	observation:visit_detail_id -> device_exposure:visit_detail_id [color="gray"];
+
+	observation:visit_detail_id -> drug_exposure:visit_detail_id [color="gray"];
+
+	observation:visit_detail_id -> measurement:visit_detail_id [color="gray"];
+
+	visit_occurrence:provider_id -> condition_occurrence:provider_id [color="gray"];
+
+	visit_occurrence:provider_id -> procedure_occurrence:provider_id [color="gray"];
+
+	visit_occurrence:provider_id -> observation:provider_id [color="gray"];
+
+	visit_occurrence:provider_id -> device_exposure:provider_id [color="gray"];
+
+	visit_occurrence:provider_id -> drug_exposure:provider_id [color="gray"];
+
+	visit_occurrence:provider_id -> person:provider_id [color="gray"];
+
+	visit_occurrence:provider_id -> measurement:provider_id [color="gray"];
+
+	visit_occurrence:care_site_id -> person:care_site_id [color="gray"];
+
+	drug_era:drug_concept_id -> drug_exposure:drug_concept_id [color="gray"];
+
+	device_exposure:provider_id -> condition_occurrence:provider_id [color="gray"];
+
+	device_exposure:provider_id -> procedure_occurrence:provider_id [color="gray"];
+
+	device_exposure:provider_id -> observation:provider_id [color="gray"];
+
+	device_exposure:provider_id -> visit_occurrence:provider_id [color="gray"];
+
+	device_exposure:provider_id -> drug_exposure:provider_id [color="gray"];
+
+	device_exposure:provider_id -> person:provider_id [color="gray"];
+
+	device_exposure:provider_id -> measurement:provider_id [color="gray"];
+
+	device_exposure:visit_detail_id -> condition_occurrence:visit_detail_id [color="gray"];
+
+	device_exposure:visit_detail_id -> procedure_occurrence:visit_detail_id [color="gray"];
+
+	device_exposure:visit_detail_id -> observation:visit_detail_id [color="gray"];
+
+	device_exposure:visit_detail_id -> drug_exposure:visit_detail_id [color="gray"];
+
+	device_exposure:visit_detail_id -> measurement:visit_detail_id [color="gray"];
+
+	drug_exposure:drug_concept_id -> drug_era:drug_concept_id [color="gray"];
+
+	drug_exposure:provider_id -> condition_occurrence:provider_id [color="gray"];
+
+	drug_exposure:provider_id -> procedure_occurrence:provider_id [color="gray"];
+
+	drug_exposure:provider_id -> observation:provider_id [color="gray"];
+
+	drug_exposure:provider_id -> visit_occurrence:provider_id [color="gray"];
+
+	drug_exposure:provider_id -> device_exposure:provider_id [color="gray"];
+
+	drug_exposure:provider_id -> person:provider_id [color="gray"];
+
+	drug_exposure:provider_id -> measurement:provider_id [color="gray"];
+
+	drug_exposure:visit_detail_id -> condition_occurrence:visit_detail_id [color="gray"];
+
+	drug_exposure:visit_detail_id -> procedure_occurrence:visit_detail_id [color="gray"];
+
+	drug_exposure:visit_detail_id -> observation:visit_detail_id [color="gray"];
+
+	drug_exposure:visit_detail_id -> device_exposure:visit_detail_id [color="gray"];
+
+	drug_exposure:visit_detail_id -> measurement:visit_detail_id [color="gray"];
+
+	condition_era:condition_concept_id -> condition_occurrence:condition_concept_id [color="gray"];
+
+	person:provider_id -> condition_occurrence:provider_id [color="gray"];
+
+	person:provider_id -> procedure_occurrence:provider_id [color="gray"];
+
+	person:provider_id -> observation:provider_id [color="gray"];
+
+	person:provider_id -> visit_occurrence:provider_id [color="gray"];
+
+	person:provider_id -> device_exposure:provider_id [color="gray"];
+
+	person:provider_id -> drug_exposure:provider_id [color="gray"];
+
+	person:provider_id -> measurement:provider_id [color="gray"];
+
+	person:care_site_id -> visit_occurrence:care_site_id [color="gray"];
+
+	measurement:provider_id -> condition_occurrence:provider_id [color="gray"];
+
+	measurement:provider_id -> procedure_occurrence:provider_id [color="gray"];
+
+	measurement:provider_id -> observation:provider_id [color="gray"];
+
+	measurement:provider_id -> visit_occurrence:provider_id [color="gray"];
+
+	measurement:provider_id -> device_exposure:provider_id [color="gray"];
+
+	measurement:provider_id -> drug_exposure:provider_id [color="gray"];
+
+	measurement:provider_id -> person:provider_id [color="gray"];
+
+	measurement:visit_detail_id -> condition_occurrence:visit_detail_id [color="gray"];
+
+	measurement:visit_detail_id -> procedure_occurrence:visit_detail_id [color="gray"];
+
+	measurement:visit_detail_id -> observation:visit_detail_id [color="gray"];
+
+	measurement:visit_detail_id -> device_exposure:visit_detail_id [color="gray"];
+
+	measurement:visit_detail_id -> drug_exposure:visit_detail_id [color="gray"];
+
+
+}
