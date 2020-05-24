@@ -292,7 +292,130 @@ but the nunber of unique values tyopicaly does not change at all
 
 must conjecture that the person table had a few thousand records deleted
 but they are not set with an "on delete cascade" so we get tens of thousands 
-of useless rows in the database, ... did.
+of dangeling rows in the database, ... did.
 
+###########################################################################
+
+
+
+
+
+#Try sorting columns by expected discriminiation potential
+
+awk '{x=(($5/$4)-.5)*2; printf "%f\t%s\t%s\n", 1-(x<0?-x:x) , $1 ,$2}'\
+     <(tail -n+2 Metadata/db_tab_col_meta.tab) |  sort -nr
+
+0.799299	person	location_id
+0.501899	procedure_occurrence	person_id
+0.411932	observation_period	observation_period_start_date
+0.253586	person	birth_datetime
+0.228507	device_exposure	device_exposure_start_datetime
+0.228507	device_exposure	device_exposure_start_date
+0.226244	device_exposure	device_exposure_end_datetime
+0.226244	device_exposure	device_exposure_end_date
+0.215510	procedure_occurrence	procedure_datetime
+0.215510	procedure_occurrence	procedure_date
+0.115385	device_exposure	person_id
+0.095635	observation_period	observation_period_end_date
+0.056783	procedure_occurrence	procedure_source_concept_id
+0.056783	procedure_occurrence	procedure_concept_id
+0.024666	visit_occurrence	person_id
+0.019928	person	year_of_birth
+0.018636	visit_occurrence	visit_end_datetime
+0.018636	visit_occurrence	visit_end_date
+0.018609	visit_occurrence	visit_start_datetime
+0.018609	visit_occurrence	visit_start_date
+0.009792	observation	person_id
+0.007248	condition_era	person_id
+0.006789	person	day_of_birth
+0.005441	condition_occurrence	person_id
+0.004028	observation	observation_datetime
+0.004028	observation	observation_date
+0.003271	measurement	value_source_value
+0.003271	measurement	value_as_number
+0.003266	drug_era	person_id
+0.002989	condition_era	condition_era_end_date
+0.002981	condition_era	condition_era_start_date
+0.002865	measurement	person_id
+0.002775	drug_exposure	person_id
+0.002628	person	month_of_birth
+0.002244	condition_occurrence	condition_end_datetime
+0.002244	condition_occurrence	condition_end_date
+0.002238	condition_occurrence	condition_start_datetime
+0.002238	condition_occurrence	condition_start_date
+0.001390	drug_era	drug_concept_id
+0.001348	drug_era	drug_era_end_date
+0.001344	drug_era	drug_era_start_date
+0.001181	drug_exposure	drug_source_concept_id
+0.001181	drug_exposure	drug_concept_idI
+0.001178	measurement	measurement_datetime
+0.001178	measurement	measurement_date
+0.001145	drug_exposure	drug_exposure_end_datetime
+0.001145	drug_exposure	drug_exposure_end_date
+0.001142	drug_exposure	drug_exposure_start_datetime
+0.001142	drug_exposure	drug_exposure_start_date
+0.001095	person	race_source_concept_id
+0.000876	person	race_concept_id
+0.000876	person	ethnicity_source_concept_id
+0.000686	condition_era	condition_concept_id
+0.000601	condition_occurrence	condition_source_concept_id
+0.000542	measurement	measurement_time
+0.000515	condition_occurrence	condition_concept_id
++0.000438	person	gender_source_value
+0.000438	person	gender_concept_id
+0.000438	person	ethnicity_concept_id
+0.000438	goldstandard	status
+0.000115	procedure_occurrence	procedure_type_concept_id
+0.000094	drug_exposure	quantity
+0.000030	drug_exposure	route_source_value
+0.000029	measurement	range_high
+0.000025	drug_exposure	dose_unit_source_value
+0.000023	measurement	range_low
+0.000021	measurement	measurement_source_concept_id
+0.000021	measurement	measurement_concept_id
+0.000019	visit_occurrence	visit_source_concept_id
+0.000019	visit_occurrence	visit_concept_id
+0.000012	observation	value_as_number
+0.000010	condition_era	condition_occurrence_count
+0.000008	measurement	unit_source_value
+0.000008	condition_occurrence	condition_status_source_value
+0.000007	drug_exposure	days_supply
+0.000006	measurement	unit_concept_id
+0.000006	drug_exposure	refills
+0.000005	observation	observation_source_concept_id
+0.000005	observation	observation_concept_id
+0.000004	observation	value_as_string
+0.000004	observation	value_as_concept_id
+0.000004	measurement	value_as_concept_id
+0.000003	drug_era	drug_exposure_count
+0.000002	observation	unit_source_value
+0.000002	observation	unit_concept_id
+0.000002	observation	observation_type_concept_id
+0.000002	drug_exposure	stop_reason
+0.000002	condition_occurrence	condition_type_concept_id
+0.000002	condition_occurrence	condition_status_concept_id
+0.000001	measurement	operator_concept_id
+0.000001	measurement	measurement_type_concept_id
+0.000001	drug_exposure	drug_type_concept_id
+0.000000	procedure_occurrence	procedure_occurrence_id
+0.000000	person	person_id
+0.000000	observation_period	person_id
+0.000000	observation_period	observation_period_id
+0.000000	observation	observation_id
+0.000000	measurement	measurement_id
+0.000000	location	location_id
+0.000000	goldstandard	person_id
+0.000000	drug_exposure	drug_exposure_id
+0.000000	drug_era	drug_era_id
+0.000000	device_exposure	device_exposure_id
+0.000000	condition_occurrence	condition_occurrence_id
+0.000000	condition_era	condition_era_id
+
+
+the 'location' table is next to go as it adds nothing beyond the fk key in person.
+the redundant date/datetime can go
+
+low information columns such as  person.person_id & goldstandard  are structual & stay 
+but some others may not have a role.
 
 
